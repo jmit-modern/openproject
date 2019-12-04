@@ -69,7 +69,7 @@ npm-debug.log*
 /log/mongrel_debug
 /public/dispatch.*
 /public/plugin_assets
-/public/assets
+# /public/assets
 /public/javascripts
 /tmp/*
 /tmp/cache/*

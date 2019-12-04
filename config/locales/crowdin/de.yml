@@ -66,7 +66,39 @@ de:
       no_results_content_title: Derzeit gibt es keine Authentifizierungsmodi.
       no_results_content_text: Erstellen Sie einen neuen Authentifizierungsmodus
   ldap_auth_sources:
+    technical_warning_html: |
+      This LDAP form requires technical knowledge of your LDAP / Active Directory setup.
+      <br/>
+      <a href="https://www.openproject.org/help/administration/manage-ldap-authentication/">Please visit our documentation for detailed instructions</a>.
+    attribute_texts:
+      name: Arbitrary name of the LDAP connection
+      host: LDAP host name or IP address
+      login_map: The attribute key in LDAP that is used to identify the unique user login. Usually, this will be `uid` or `samAccountName`.
+      generic_map: The attribute key in LDAP that is mapped to the OpenProject `%{attribute}` attribute
+      admin_map_html: "Optional: The attribute key in LDAP that <strong>if present</strong> marks the OpenProject user an admin. Leave empty when in doubt."
+      system_user_dn_html: |
+        Enter the DN of the system user used for read-only access.
+        <br/>
+        Example: uid=openproject,ou=system,dc=example,dc=com
+      system_user_password: Enter the bind password of the system user
+      base_dn: |
+        Enter the Base DN of the subtree in LDAP you want OpenProject to look for users and groups.
+        OpenProject will filter for provided usernames in this subtree only.
+        Example: ou=users,dc=example,dc=com
+      onthefly_register: |
+        If you check this box, OpenProject will automatically create new users from their LDAP entries
+        when they first authenticate with OpenProject.
+        Leave this unchecked to only allow existing accounts in OpenProject to authenticate through LDAP!
     connection_encryption: 'Verbindungsverschlüsselung'
+    system_account: 'System account'
+    system_account_legend: |
+      OpenProject requires read-only access through a system account to lookup users and groups in your LDAP tree.
+      Please specify the bind credentials for that system user in the following section.
+    ldap_details: 'LDAP details'
+    user_settings: 'Attribute mapping'
+    user_settings_legend: |
+      The following fields are related to how users are created in OpenProject from LDAP entries and
+      what LDAP attributes are used to define the attributes of an OpenProject user (attribute mapping).
     tls_mode:
       plain: 'keine'
       simple_tls: 'simple_tls'
@@ -445,7 +477,7 @@ de:
         could_not_be_copied: "konnten nicht (vollständig) kopiert werden."
         does_not_exist: "existiert nicht."
         error_unauthorized: "kann nicht zugegriffen werden."
-        error_readonly: "ist nicht beschreibbar."
+        error_readonly: "was attempted to be written but is not writable."
         empty: "muss ausgefüllt werden."
         even: "muss gerade sein."
         exclusion: "ist nicht verfügbar."
@@ -2526,7 +2558,6 @@ de:
         estimated_hours: "Der geschätzte Aufwand kann für Eltern-Arbeitspakete nicht gesetzt werden."
         invalid_user_assigned_to_work_package: "Der gewählte Nutzer darf dem Arbeitspaket nicht als '%{property}' zugewiesen werden."
         start_date: "Das Startdatum kann für Eltern-Arbeitspakete nicht gesetzt werden."
-      writing_read_only_attributes: "Nur-lesende Eigenschaften dürfen nicht geschrieben werden."
     resources:
       schema: 'Schema'
   doorkeeper:
@@ -2574,6 +2605,7 @@ de:
         redirect_uri_html: >
           Die erlaubten URLs auf welche autorisierte Benutzer weitergeleitet werden können. Ein Eintrag pro Zeile. <br/> Wenn Sie eine Desktop-Anwendung registrieren, verwenden Sie die folgende URL.
         confidential: "Überprüfen Sie, ob die Anwendung verwendet wird, wo das Client-Geheimnis vertraulich gehalten werden kann. Native mobile Apps und Single Page Apps sind nicht vertraulich."
+        scopes: "Check the scopes you want the application to grant access to. If no scope is checked, api_v3 is assumed."
         client_credential_user_id: "Optionaler Nutzer, der bei der Nutzung dieser Anwendung verkörpert wird. Leer lassen, um nur öffentlichen Zugriff zu erlauben"
         register_intro: "Wenn Sie eine OAuth API-Client-Anwendung für OpenProject entwickeln, können Sie es mit diesem Formular für alle Benutzer registrieren."
         default_scopes: ""
@@ -2588,8 +2620,8 @@ de:
       wants_to_access_html: >
         Diese Anwendung bittet um Zugriff auf Ihr OpenProject-Konto. <br/> <strong>Es hat folgende Berechtigungen angefordert:</strong>
     scopes:
-      api_v3: "Vollständiger API-Zugriff"
-      api_v3_text: "Die Anwendung erhält vollen Lese- und Schreibzugriff auf die OpenProject-API, um Aktionen in Ihrem Namen durchzuführen."
+      api_v3: "Full API v3 access"
+      api_v3_text: "Application will receive full read & write access to the OpenProject API v3 to perform actions on your behalf."
     grants:
       created_date: "Genehmigt am"
       scopes: "Berechtigungen"

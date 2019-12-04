@@ -66,7 +66,39 @@ ja:
       no_results_content_title: 現在認証モードはありません。
       no_results_content_text: 新しい認証モードを作成
   ldap_auth_sources:
+    technical_warning_html: |
+      This LDAP form requires technical knowledge of your LDAP / Active Directory setup.
+      <br/>
+      <a href="https://www.openproject.org/help/administration/manage-ldap-authentication/">Please visit our documentation for detailed instructions</a>.
+    attribute_texts:
+      name: Arbitrary name of the LDAP connection
+      host: LDAP host name or IP address
+      login_map: The attribute key in LDAP that is used to identify the unique user login. Usually, this will be `uid` or `samAccountName`.
+      generic_map: The attribute key in LDAP that is mapped to the OpenProject `%{attribute}` attribute
+      admin_map_html: "Optional: The attribute key in LDAP that <strong>if present</strong> marks the OpenProject user an admin. Leave empty when in doubt."
+      system_user_dn_html: |
+        Enter the DN of the system user used for read-only access.
+        <br/>
+        Example: uid=openproject,ou=system,dc=example,dc=com
+      system_user_password: Enter the bind password of the system user
+      base_dn: |
+        Enter the Base DN of the subtree in LDAP you want OpenProject to look for users and groups.
+        OpenProject will filter for provided usernames in this subtree only.
+        Example: ou=users,dc=example,dc=com
+      onthefly_register: |
+        If you check this box, OpenProject will automatically create new users from their LDAP entries
+        when they first authenticate with OpenProject.
+        Leave this unchecked to only allow existing accounts in OpenProject to authenticate through LDAP!
     connection_encryption: '接続の暗号化'
+    system_account: 'System account'
+    system_account_legend: |
+      OpenProject requires read-only access through a system account to lookup users and groups in your LDAP tree.
+      Please specify the bind credentials for that system user in the following section.
+    ldap_details: 'LDAP details'
+    user_settings: 'Attribute mapping'
+    user_settings_legend: |
+      The following fields are related to how users are created in OpenProject from LDAP entries and
+      what LDAP attributes are used to define the attributes of an OpenProject user (attribute mapping).
     tls_mode:
       plain: 'なし'
       simple_tls: 'simple_tls'
@@ -444,7 +476,7 @@ ja:
         could_not_be_copied: "（完全に）コピーできませんでした。"
         does_not_exist: "は存在しません。"
         error_unauthorized: "アクセスできません。"
-        error_readonly: "書込みできません。"
+        error_readonly: "was attempted to be written but is not writable."
         empty: "は空にすることができません。"
         even: "は偶数にしてください。"
         exclusion: "は予約されています。"
@@ -961,7 +993,7 @@ ja:
         add_groups: "新しい属性グループを追加"
         rename_groups: "属性グループの名前を変更"
       project_filters:
-        description_html: "Filtering and sorting on custom fields is an enterprise edition feature."
+        description_html: "カスタムフィールドのフィルタリングと並べ替えは、エンタープライズ版の機能です。"
   enumeration_activities: "作業分類 (時間の追跡)"
   enumeration_work_package_priorities: "作業項目の優先度"
   enumeration_system_activity: "システム作業分類"
@@ -2504,7 +2536,6 @@ ja:
         estimated_hours: "推定時間は、親ワークパッケージに設定できません。"
         invalid_user_assigned_to_work_package: "選択されたユーザーは、この作業項目の'%{property}' にすることはできません。"
         start_date: "開始日は、親ワークパッケージに設定できません。"
-      writing_read_only_attributes: "読み取り専用の属性を書き込みできません。"
     resources:
       schema: 'スキーマ'
   doorkeeper:
@@ -2552,6 +2583,7 @@ ja:
         redirect_uri_html: >
           許可されたURLで承認されたユーザーにリダイレクトできます。 1行に1エントリ。<br/>デスクトップアプリケーションを登録する場合は、次のURLを使用してください。
         confidential: "クライアントシークレットを機密にできる場所でアプリケーションが使用されるかどうかを確認します。 ネイティブモバイルアプリとシングルページアプリは機密とはみなされません。"
+        scopes: "Check the scopes you want the application to grant access to. If no scope is checked, api_v3 is assumed."
         client_credential_user_id: "クライアントがこのアプリケーションを使用するときに偽装するためのオプションのユーザーIDです。 パブリックアクセスのみを許可するには空のままにします"
         register_intro: "OpenProject用のOAuth APIクライアントアプリケーションを開発している場合は、このフォームを使用してすべてのユーザーが使用できるように登録できます。"
         default_scopes: ""
@@ -2566,8 +2598,8 @@ ja:
       wants_to_access_html: >
         このアプリケーションはあなたのOpenProjectアカウントへのアクセスを要求します。 <br/> <strong>次の権限が要求されています：</strong>
     scopes:
-      api_v3: "フルAPIアクセス"
-      api_v3_text: "アプリケーションはあなたに代わってアクションを実行するためにOpenProject APIへの完全な読み書きアクセス権を受け取ります。"
+      api_v3: "Full API v3 access"
+      api_v3_text: "Application will receive full read & write access to the OpenProject API v3 to perform actions on your behalf."
     grants:
       created_date: "に承認済み"
       scopes: "権限"
